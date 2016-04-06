@@ -1,0 +1,58 @@
+TSC Covert Voting Process Software
+°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+
+This is the software used to run covert voting processes in TSC. It
+includes both a program to generate the cryptographically signed
+voting ballots (“genballots.rb”) and a web service software based on
+Ruby’s Sinatra library (“covertvote.rb”). The two don’t have to be run
+on the same machine.
+
+Dependencies
+------------
+
+Both programs are written in Ruby, so you need to have Ruby installed,
+at least in version 2.0.0.
+
+The voting ballots generator has no dependencies except the GPG
+commandline program, which has thus to be available in your $PATH.
+
+The webservice depends on Ruby’s Sinatra library. Install it using
+RubyGems:
+
+    $ gem install sinatra
+
+The software has only been tested and was only written for Linux
+systems. Don’t expect it to run anywhere else, though any Unix should
+work.
+
+Running
+-------
+
+Both programs are marked as executable, so they can be run just by
+calling them.
+
+For a recommended procedure in taking votes, read
+views/guide.erb. After you started the webservice, you can also read
+it on the served website by appending /guide to the main URL.
+
+The webservice prints the listening port on standard output. You can
+use the -p option on it to switch it to a different port.
+
+License
+-------
+
+Covert TSC voting process software.
+Copyright (C) 2016 The TSC Team
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.

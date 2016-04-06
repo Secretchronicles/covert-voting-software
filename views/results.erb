@@ -1,0 +1,17 @@
+<h1>Voting Results</h1>
+
+<p>
+  Following are the voting ballots submitted so far. When counting, be
+  sure to verify the signatures using the <code>gpg</code> command.
+</p>
+
+<% if @ballots.empty? %>
+  <p>There have no ballots been submitted yet.</p>
+<% else %>
+  <% @ballots.each_with_index do |ballot, index| %>
+    <h2>Ballot #<%= index + 1 %></h2>
+    <pre><%= ballot %></pre>
+  <% end %>
+<% end %>
+
+<p>Page retrieved: <%= Time.now.utc %></p>

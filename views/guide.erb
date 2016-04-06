@@ -1,0 +1,145 @@
+<h1>How to take votes covertedly</h1>
+
+<p>
+  This is a short guide explaining how to use this service for taking
+  a covert vote. It is intended for the vote taker. As a voter, follow
+  the instructions on <a href="/">the main page</a>.
+</p>
+
+<h2>Step 1: Get all email addresses of the voters</h2>
+
+<p>
+  Since the voting ballots are emailed to the voters, you need to get
+  hold of all their email addresses.
+</p>
+
+<h2>Step 2: Get a GPG keypair</h2>
+
+<p>
+  The voting ballots must be cryptographically signed to prevent
+  forgery. For this, you need a GPG keypair. There are dozens of
+  tutorials on the web that teach you how to do that, so search for
+  them.
+</p>
+
+<h2>Step 3: Generate the voting ballots</h2>
+
+<p>
+  Use the provided <code>genballots.rb</code> program to generate the
+  voting ballots for everyone. This program expects a
+  newline-separated list of email addresses on the standard input and
+  as its first (and only) commandline argument it wants the key ID of
+  the GPG key to use for signing the ballots.
+</p>
+
+<p>
+  For example, if you have this file <code>emails.txt</code>:
+</p>
+
+<pre>
+  john.doe@example.com
+  jane.doe@example.org
+</pre>
+
+<p>
+  And your private GPG key’s ID is 123456, then you would call the
+  program like this:
+</p>
+
+<pre>
+  $ ./genballots.rb 123456 &lt; emails.txt
+</pre>
+
+<p>
+  When the program has finished, you will have voting ballots for each
+  of the given addresses in the
+  directory <code>/tmp/votingballots</code>.
+</p>
+
+<p>
+  The <code>genballots.rb</code> program is independant from the web
+  service (Step 5). It does not even have dependencies other than
+  GPG. You can easily run it on another machine than the web service.
+</p>
+
+<h2>Step 4: Send the voting ballots to the voters</h2>
+
+<p>
+  Using regular email, send the voting ballots out the the
+  voters. Afterwards, delete <code>/tmp/votingballots</code>. The
+  cryptographic signature on the ballots alone is enough to verify
+  they’re correct, you don’t need a list of ballots you sent.
+</p>
+
+<h2>Step 5: Run and announce voting service</h2>
+
+<p>
+  Either in the email of Step 4, or separately, announce where you run
+  the web service for uploading the covert votes
+  (<code>covertvote.rb</code>). Once you have sent all emails, ask people to
+  upload their voting ballots.
+</p>
+
+<p>
+  To actually run the service, install the <code>sinatra</code> RubyGem and then
+  run <code>covertvote.rb</code>:</p>
+
+<pre>
+$ gem install sinatra
+$ ./covertvote.rb
+</pre>
+
+<p>
+  It will print out on standard output the port it is listening on. By
+  default, this will be 1234. To change it, pass the -p option with a
+  different port.
+</p>
+
+<h2>Step 6: Voting</h2>
+
+<p>
+  All people can now vote by uploading their voting ballots.
+</p>
+
+<h2>Step 7: Counting</h2>
+
+<p>
+  Once everybody has voted (or the voting period is over), browse to
+  the <a href="/results">results page</a> and count the results. For
+  each of the voting ballots on that page, download it and save it
+  into a text file. Then verify it with:
+</p>
+
+<pre>
+$ gpg --verify filename.ballot
+gpg: Signature made Wed 06 Apr 2016 12:58:08 PM CEST using RSA key ID 123456
+gpg: Good signature from "John Doe &lt;john@example.com&gt;" [ultimate]
+</pre>
+
+<p>
+  If the ballot is valid (like the above), count it. Otherwise, ignore
+  it as invalid. A bad signature is reported by GPG like this:
+</p>
+
+<pre>
+$ gpg --verify filename.ballot
+gpg: Signature made Wed 06 Apr 2016 12:58:08 PM CEST using RSA key ID 123456
+gpg: BAD signature from "John Doe &lt;john@example.com&gt;" [ultimate]
+</pre>
+
+<p>
+  If people uploaded different things than voting ballots, ignore
+  them. If somebody uploaded really weird stuff (<code>covertvote.rb</code> does
+  not do any checks), abort the vote due to disturbance of the voting
+  process.
+</p>
+
+<h2>Step 8: Cleanup</h2>
+
+<p>
+  The uploaded votes are kept in the <code>ballots</code> directory in the
+  working directory of <code>covertvote.rb</code>. Once you have declared the
+  voting result, you can delete this directory. Before you start a new
+  vote, you have to delete it, otherwise you’ll end up with voting
+  ballots for different votes being mixed.
+</p>

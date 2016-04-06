@@ -1,0 +1,80 @@
+<h1>TSC Covert Voting</h1>
+
+<h2>How it works</h2>
+
+<p>
+  You should have received a cryptographically signed voting ballot by
+  email; if not, check your spam folder. This should look like this:
+</p>
+
+<pre>
+TSC Covert Voting Ballot
+°°°°°°°°°°°°°°°°°°°°°°°°
+
+Insert your vote here:
+
+
+Following is the cryptographic signature of the voting ballot. DO NOT
+CHANGE THE BELOW!
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+... much text ...
+
+-----BEGIN PGP SIGNATURE-----
+
+... hieroglyphs constituting the cryptographic signature ...
+-----END PGP SIGNATURE-----
+</pre>
+
+<p>
+  To participate in voting, insert your vote (e.g. “I vote option 4”)
+  after the line that says “Insert your vote here”. Then upload the
+  resulting file with the upload form below. <em>Ensure the
+    cryptographic signature is not changed!</em>
+</p>
+
+<p>
+  Do <em>not</em> sign the voting ballot with your own PGP key. This
+  is a <em>covert</em> voting process that is meant to be anonymous.
+</p>
+
+<p>
+  The cryptographic signature obviously doesn’t include your vote
+  itself, which thus in theory could be altered by a Man-in-the-Middle
+  attack. We’ll have to live with this risk for now. The signature
+  included in the voting ballot is only to ensure that nobody can vote
+  multiple times without being detected, and to prevent people who are
+  not allowed to vote at all to vote.
+</p>
+
+<p>
+  Each voting ballot has a unique character combination in it that
+  makes it unspoofable (without altering the cryptographic
+  signature). The mapping of unique signature and email address the
+  ballot was sent to is initially held by the vote taker, but is
+  deleted as soon as all emails are sent out such that it is
+  impossible to find out who voted with that ballot.
+</p>
+
+<p>
+  This voting web service does not log your IP address.
+</p>
+
+<h2>Upload voting ballot</h2>
+
+<form action="/votingballot" method="post"
+      enctype="multipart/form-data" accept-charset="UTF-8">
+
+  <p><input type="file" name="votingballot"/></p>
+
+  <p><input type="submit" value="Vote"/></p>
+</form>
+
+<h2>View results so far</h2>
+
+<p>
+  The collected voting ballots can be
+  browsed <a href="/results">online</a>.
+</p>
